@@ -1,15 +1,20 @@
-package com.example.btl_androidnc_music;
+package com.example.btl_androidnc_music; // Thay package của bạn
 
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.btl_androidnc_music.databinding.ActivityRegisterBinding; // <-- THAY TÊN PACKAGE CỦA BẠN
+import androidx.room.Room;
+
+import com.example.btl_androidnc_music.databinding.ActivityRegisterBinding;
+
+import java.util.concurrent.Executors;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private AuthManager authManager;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,18 +23,24 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         authManager = new AuthManager(this);
+        db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "music-db")
+                .fallbackToDestructiveMigration().build();
 
         // Xử lý nút Đăng Ký
         binding.btnRegister.setOnClickListener(v -> {
-            registerUser();
+            registerUser(); // Gọi hàm đăng ký ở dưới
         });
 
         // Xử lý nút chuyển về Đăng Nhập
         binding.tvGoToLogin.setOnClickListener(v -> {
-            finish(); // Đóng màn hình này để quay lại màn hình Login
+            finish();
         });
     }
 
+    /**
+     * Hàm này xử lý toàn bộ logic đăng ký
+     */
     private void registerUser() {
         String email = binding.etEmail.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
@@ -45,10 +56,23 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // Lưu tài khoản
-        authManager.registerUser(email, password);
+        // --- SỬA LẠI LOGIC GỌI HÀM ---
+        // Gọi hàm createUser() mới
+        if (authManager.createUser(email, password)) {
 
-        Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-        finish(); // Đóng RegisterActivity và quay lại LoginActivity
+            // 1. Tạo user trong Room DB (cho bình luận)
+            User newUser = new User(email);
+            Executors.newSingleThreadExecutor().execute(() -> {
+                db.userDao().insertUser(newUser);
+            });
+
+            // 2. Thông báo và quay lại Login
+            Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            // 3. Nếu createUser trả về false -> email đã tồn tại
+            Toast.makeText(this, "Email này đã được sử dụng", Toast.LENGTH_SHORT).show();
+        }
+        // --- KẾT THÚC SỬA ---
     }
 }

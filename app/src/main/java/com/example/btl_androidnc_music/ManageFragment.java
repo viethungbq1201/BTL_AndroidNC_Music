@@ -23,10 +23,16 @@ public class ManageFragment extends Fragment {
 
         // Xử lý Đăng xuất (giống hệt code cũ)
         binding.btnLogout.setOnClickListener(v -> {
-            authManager.logout();
+            // 1. Gọi hàm logout mới và truyền Context
+            authManager.logout(requireContext());
+
+            // 2. Quay về màn hình Login
             Intent intent = new Intent(getActivity(), LoginActivity.class);
+            // Cờ này sẽ xóa tất cả các Activity cũ (Home, Player)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            getActivity().finish();
+
+            getActivity().finish(); // Đóng HomeActivity
         });
 
         // Xử lý khi nhấn vào "Tải nhạc lên"

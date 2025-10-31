@@ -13,6 +13,7 @@ public class AuthManager {
     private static final String KEY_EMAIL = "user_email";
     private static final String KEY_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_LOGGED_IN_USER = "logged_in_user";
 
     private SharedPreferences sharedPreferences;
 
@@ -33,20 +34,31 @@ public class AuthManager {
     }
 
     // Hàm Đăng Ký: Lưu email và mật khẩu (đã mã hóa)
-    public void registerUser(String email, String password) {
+    public boolean createUser(String email, String password) {
+        // Kiểm tra xem email (key) đã tồn tại chưa
+        if (sharedPreferences.contains(email)) {
+            // Đã tồn tại -> không thể tạo -> trả về false
+            return false;
+        }
+
+        // Chưa tồn tại -> tạo mới
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_PASSWORD, password); // Mật khẩu tự động được mã hóa
+        editor.putString(email, password); // Lưu email làm key, password làm value
         editor.apply();
+        return true; // Tạo thành công
     }
 
     // Hàm Đăng Nhập: Kiểm tra email và mật khẩu
     public boolean loginUser(String email, String password) {
-        String savedEmail = sharedPreferences.getString(KEY_EMAIL, null);
-        String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
-
-        // So sánh
-        return email.equals(savedEmail) && password.equals(savedPassword);
+        String storedPassword = sharedPreferences.getString(email, null);
+        if (storedPassword != null && storedPassword.equals(password)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
+            editor.putString(KEY_LOGGED_IN_USER, email); // <-- Nó lưu email ở đây
+            editor.apply();
+            return true;
+        }
+        return false;
     }
 
     // Lưu trạng thái đăng nhập
@@ -62,12 +74,21 @@ public class AuthManager {
     }
 
     // Đăng xuất
-    public void logout() {
+    public void logout(Context context) { // <-- Thêm Context
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(KEY_IS_LOGGED_IN, false);
-        // Bạn có thể chọn xóa cả email/pass nếu muốn
-        // editor.remove(KEY_EMAIL);
-        // editor.remove(KEY_PASSWORD);
+        editor.remove(KEY_IS_LOGGED_IN);
+        editor.remove(KEY_LOGGED_IN_USER);
         editor.apply();
+
+        // <-- THÊM MỚI: Lấy Manager và tắt nhạc -->
+        MusicPlayerManager playerManager = MusicPlayerManager.getInstance(context);
+        if (playerManager != null) {
+            playerManager.stopAndRelease();
+        }
+    }
+
+    // <-- THÊM HÀM MỚI NÀY -->
+    public String getLoggedInUsername() {
+        return sharedPreferences.getString(KEY_LOGGED_IN_USER, null);
     }
 }

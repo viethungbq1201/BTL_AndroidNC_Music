@@ -22,7 +22,28 @@ public class LoginActivity extends AppCompatActivity {
 
         // Xử lý nút Đăng Nhập
         binding.btnLogin.setOnClickListener(v -> {
-            loginUser();
+            String email = binding.etEmail.getText().toString().trim();
+            String password = binding.etPassword.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // SỬ DỤNG HÀM login() TỪ AUTHMANAGER
+            // Hàm này sẽ tự động lưu email nếu đăng nhập thành công
+            if (authManager.loginUser(email, password)) {
+
+                // Đăng nhập thành công
+                Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish(); // Đóng LoginActivity
+            } else {
+                // Đăng nhập thất bại
+                Toast.makeText(this, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Xử lý nút chuyển qua Đăng Ký
