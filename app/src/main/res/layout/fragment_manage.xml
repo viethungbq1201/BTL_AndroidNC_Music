@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Space android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+    <TextView
+        android:id="@+id/tv_upload_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tải nhạc lên"
+        android:textSize="18sp"
+        android:padding="12dp" />
+    <TextView
+        android:id="@+id/tv_uploaded_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhạc đã tải lên"
+        android:textSize="18sp"
+        android:padding="12dp" />
+    <TextView
+        android:id="@+id/tvFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yêu thích"
+        android:textSize="18sp"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất" />
+</LinearLayout>
