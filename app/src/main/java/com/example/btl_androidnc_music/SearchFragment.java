@@ -216,7 +216,23 @@ public class SearchFragment extends Fragment {
 
     // Hàm tìm theo thể loại (Giữ nguyên)
     private void performGenreSearch(String genre) {
-        // ... (code như cũ)
+        // Chạy trên luồng nền
+        Executors.newSingleThreadExecutor().execute(() -> {
+
+            // Gọi đúng hàm DAO: getTracksByGenre
+            // Hàm này sẽ tìm chính xác thể loại (ví dụ: "123")
+            List<Track> results = db.trackDao().getTracksByGenre(genre);
+
+            if (getActivity() != null) {
+                // Cập nhật UI trên luồng chính
+                getActivity().runOnUiThread(() -> {
+                    // Đổ dữ liệu vào cùng 1 danh sách kết quả
+                    searchResultsList.clear();
+                    searchResultsList.addAll(results);
+                    searchResultAdapter.notifyDataSetChanged();
+                });
+            }
+        });
     }
 
     // --- THÊM CÁC HÀM HELPER MỚI ---
