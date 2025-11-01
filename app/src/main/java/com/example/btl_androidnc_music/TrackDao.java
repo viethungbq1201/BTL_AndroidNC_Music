@@ -34,4 +34,7 @@ public interface TrackDao {
     @Query("SELECT * FROM tracks WHERE title LIKE '%' || :query || '%' OR artist LIKE '%' || :query || '%'")
     List<Track> searchTracks(String query);
 
+    @Query("SELECT * FROM tracks WHERE id = :trackId")
+    Track getTrackById(int trackId);
+    // Thêm hàm này vào file TrackDao.java
 }

@@ -1,12 +1,9 @@
-package com.example.btl_androidnc_music;
+package com.example.btl_androidnc_music; // <-- THAY PACKAGE CỦA BẠN
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -29,10 +26,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
-import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.session.MediaController; // <-- SỬA: Import MediaController
 import androidx.room.Room;
 
-import com.example.btl_androidnc_music.databinding.FragmentPlayerControlsBinding; // <-- Đổi tên file binding nếu cần
+import com.example.btl_androidnc_music.databinding.FragmentPlayerControlsBinding;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,20 +39,18 @@ import java.io.OutputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Fragment này chứa giao diện điều khiển trình phát nhạc chính (play, pause, seekbar, v.v.)
- */
 public class PlayerControlsFragment extends Fragment {
 
     private FragmentPlayerControlsBinding binding;
-    private ExoPlayer exoPlayer;
+    private MediaController mediaController; // <-- SỬA: Dùng MediaController
     private AppDatabase db;
-    private Track mCurrentTrack; // Bài hát đang được phát
+    private Track mCurrentTrack;
 
     private Handler handler;
     private Runnable updateProgressRunnable;
+    private Player.Listener playerListener; // Biến listener
 
-    // Các biến trạng thái cho nút Loop (theo logic tùy chỉnh của bạn)
+    // Các biến trạng thái cho Loop
     private static final int LOOP_MODE_OFF = 0;
     private static final int LOOP_MODE_ONE_SHOT = 1;
     private static final int LOOP_MODE_INFINITE = 2;
@@ -68,19 +63,17 @@ public class PlayerControlsFragment extends Fragment {
     // Launcher để xin quyền Tải xuống
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private Track trackToDownload = null;
-    private Player.Listener playerListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Khởi tạo trình xin quyền (phải làm trong onCreate hoặc onAttach)
+        // Khởi tạo trình xin quyền
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
                     if (isGranted) {
                         if (trackToDownload != null) {
-                            // Người dùng vừa cấp quyền -> tiến hành lưu file
                             saveTrackForLegacy(trackToDownload);
                         }
                     } else {
@@ -95,77 +88,99 @@ public class PlayerControlsFragment extends Fragment {
         binding = FragmentPlayerControlsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        // Lấy DB
         db = Room.databaseBuilder(requireContext(), AppDatabase.class, "music-db")
                 .fallbackToDestructiveMigration().build();
 
-        // Lấy ExoPlayer từ Singleton
-        exoPlayer = MusicPlayerManager.getInstance(requireContext()).getExoPlayer();
+        // Lấy MediaController từ PlayerActivity (cha của nó)
+        if (getActivity() != null) {
+            // SỬA: Gọi đúng tên hàm mới
+            mediaController = ((PlayerActivity) getActivity()).getServiceMediaController();
+        }
+
+        if (mediaController == null) {
+            Toast.makeText(requireContext(), "Lỗi trình phát nhạc", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+            return view;
+        }
 
         handler = new Handler(Looper.getMainLooper());
 
         initializeUpdateRunnable();
         setupClickListeners();
         setupPlayerListener();
-        updateUiForNewTrack(); // Cập nhật UI ngay khi Fragment được tạo
+        updateUiForNewTrack();
 
         return view;
     }
 
-    // Hàm này lấy bài hát hiện tại từ Manager
+    // SỬA HÀM NÀY (Vì giờ ta lấy Track từ DB)
     private void updateUiForNewTrack() {
-        mCurrentTrack = MusicPlayerManager.getInstance(requireContext()).getCurrentTrack();
-        if (mCurrentTrack == null || binding == null) return;
+        if (mediaController == null || binding == null || !isAdded()) return;
 
-        binding.tvSongTitle.setText(mCurrentTrack.title);
-        binding.tvSongArtist.setText(mCurrentTrack.artist);
+        MediaItem currentItem = mediaController.getCurrentMediaItem();
+        if (currentItem == null || currentItem.mediaId == null) return;
 
-        // Cập nhật ảnh bìa
-        if (mCurrentTrack.imagePath != null && !mCurrentTrack.imagePath.isEmpty()) {
-            binding.ivCoverArt.setImageURI(Uri.fromFile(new File(mCurrentTrack.imagePath)));
-        } else {
-            binding.ivCoverArt.setImageResource(R.drawable.ic_music_note);
+        // Lấy track ID từ MediaItem (chúng ta đã gán nó ở PlayerActivity)
+        int trackId;
+        try {
+            trackId = Integer.parseInt(currentItem.mediaId);
+        } catch (NumberFormatException e) {
+            return; // ID không hợp lệ
         }
 
-        // Cập nhật nút yêu thích
-        setFavoriteButtonState(mCurrentTrack.isFavorite);
+        // Lấy thông tin Track đầy đủ từ DB (chạy nền)
+        Executors.newSingleThreadExecutor().execute(() -> {
+            mCurrentTrack = db.trackDao().getTrackById(trackId); // <-- **CẦN THÊM HÀM NÀY VÀO DAO**
+
+            if (mCurrentTrack != null && getActivity() != null) {
+                // Cập nhật UI trên luồng chính
+                getActivity().runOnUiThread(() -> {
+                    if(binding == null || !isAdded()) return; // Kiểm tra lại
+
+                    binding.tvSongTitle.setText(mCurrentTrack.title);
+                    binding.tvSongArtist.setText(mCurrentTrack.artist);
+
+                    if (mCurrentTrack.imagePath != null && !mCurrentTrack.imagePath.isEmpty()) {
+                        binding.ivCoverArt.setImageURI(Uri.fromFile(new File(mCurrentTrack.imagePath)));
+                    } else {
+                        binding.ivCoverArt.setImageResource(R.drawable.ic_music_note);
+                    }
+                    setFavoriteButtonState(mCurrentTrack.isFavorite);
+                });
+            }
+        });
     }
 
-    // Cài đặt listener để lắng nghe sự kiện từ ExoPlayer
-    // Cài đặt listener để lắng nghe sự kiện từ ExoPlayer
+    // SỬA HÀM NÀY (Đổi exoPlayer -> mediaController)
     private void setupPlayerListener() {
-        if (exoPlayer == null) return;
+        if (mediaController == null) return;
 
-        // --- SỬA LỖI Ở ĐÂY ---
-        // Chúng ta phải khởi tạo listener TRƯỚC KHI sử dụng
         if (playerListener == null) {
             playerListener = new Player.Listener() {
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
-                    // Thêm kiểm tra binding null để tránh crash khi chuyển bài
-                    if (binding == null) return;
+                    if (binding == null || !isAdded()) return;
 
                     if (playbackState == Player.STATE_READY) {
-                        // Nhạc đã sẵn sàng, lấy tổng thời gian
-                        long totalDuration = exoPlayer.getDuration();
+                        long totalDuration = mediaController.getDuration();
                         binding.seekBar.setMax((int) totalDuration);
                         binding.tvTotalTime.setText(formatTime(totalDuration));
                         handler.post(updateProgressRunnable);
                     }
-
-                    // Khi bài hát KẾT THÚC (xử lý logic Loop One)
                     if (playbackState == Player.STATE_ENDED) {
                         if (currentLoopMode == LOOP_MODE_ONE_SHOT && !hasLoopedOnce) {
                             hasLoopedOnce = true;
-                            exoPlayer.seekTo(0);
-                            exoPlayer.play();
+                            mediaController.seekTo(0);
+                            mediaController.play();
                         }
                     }
                 }
 
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
-                    if (binding == null) return; // Kiểm tra null
+                    if (binding == null || !isAdded()) return;
 
                     if (isPlaying) {
                         handler.post(updateProgressRunnable);
@@ -176,68 +191,49 @@ public class PlayerControlsFragment extends Fragment {
                     }
                 }
 
-                // Khi bài hát tự động chuyển hoặc do nhấn Next/Prev
                 @Override
                 public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
-                    if (binding == null) return; // Kiểm tra null
+                    if (binding == null || !isAdded()) return;
 
-                    updateUiForNewTrack();
+                    updateUiForNewTrack(); // Tải thông tin bài mới
 
-                    // Tự động tắt LOOP ONE khi chuyển bài
                     if (currentLoopMode == LOOP_MODE_ONE_SHOT) {
                         setLoopMode(LOOP_MODE_OFF);
                     }
-                    hasLoopedOnce = false; // Reset cờ lặp
+                    hasLoopedOnce = false;
                 }
             };
         }
-        // --- KẾT THÚC SỬA ---
 
-        // Bây giờ listener chắc chắn không null, ta thêm nó vào
-        exoPlayer.addListener(playerListener);
+        mediaController.addListener(playerListener);
 
-        // Cập nhật trạng thái nút Play/Pause ban đầu
-        if (binding != null) { // Thêm kiểm tra ở đây cho chắc
-            binding.btnPlayPause.setImageResource(exoPlayer.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+        if (binding != null) {
+            binding.btnPlayPause.setImageResource(mediaController.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
         }
     }
 
-    // Gán sự kiện click cho tất cả các nút
+    // SỬA HÀM NÀY (Đổi exoPlayer -> mediaController)
     private void setupClickListeners() {
-        // Play/Pause
         binding.btnPlayPause.setOnClickListener(v -> {
-            if (exoPlayer.isPlaying()) {
-                exoPlayer.pause();
+            if (mediaController.isPlaying()) {
+                mediaController.pause();
             } else {
-                exoPlayer.play();
+                mediaController.play();
             }
         });
 
-        // Next
-        // Next
         binding.btnNext.setOnClickListener(v -> {
-            if (exoPlayer.hasNextMediaItem()) {
-                // 1. Nếu còn bài tiếp theo -> Chuyển bài
-                exoPlayer.seekToNextMediaItem();
+            if (mediaController.hasNextMediaItem()) {
+                mediaController.seekToNextMediaItem();
+            } else if (currentLoopMode != LOOP_MODE_OFF) {
+                mediaController.seekTo(0, 0); // Quay về bài đầu
             } else {
-                // 2. Đã ở cuối danh sách
-                // Kiểm tra xem chế độ lặp CỦA BẠN có đang TẮT không
-                if (currentLoopMode == LOOP_MODE_OFF) {
-                    // 3. Nếu lặp tắt -> Báo lỗi
-                    Toast.makeText(requireContext(), "Đã hết danh sách phát", Toast.LENGTH_SHORT).show();
-                } else {
-                    // 4. Nếu lặp đang bật (ONE_SHOT hoặc INFINITE)
-                    // Cứ gọi seekToNext, ExoPlayer sẽ tự xử lý (nếu là REPEAT_MODE_ALL)
-                    // Hoặc bạn có thể tự chuyển về bài đầu tiên
-                    exoPlayer.seekTo(0, 0); // Chuyển về bài đầu tiên
-                }
+                Toast.makeText(requireContext(), "Đã hết danh sách phát", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Previous
-        binding.btnPrevious.setOnClickListener(v -> exoPlayer.seekToPreviousMediaItem());
+        binding.btnPrevious.setOnClickListener(v -> mediaController.seekToPreviousMediaItem());
 
-        // Loop (Logic tùy chỉnh)
         binding.btnLoop.setOnClickListener(v -> {
             if (currentLoopMode == LOOP_MODE_OFF) {
                 setLoopMode(LOOP_MODE_ONE_SHOT);
@@ -248,12 +244,11 @@ public class PlayerControlsFragment extends Fragment {
             }
         });
 
-        // Shuffle
         binding.btnShuffle.setOnClickListener(v -> {
             isShuffle = !isShuffle;
-            exoPlayer.setShuffleModeEnabled(isShuffle);
+            mediaController.setShuffleModeEnabled(isShuffle); // Sửa
             if (isShuffle) {
-                binding.btnShuffle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green)); // Đổi màu
+                binding.btnShuffle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
                 Toast.makeText(requireContext(), "Shuffle On", Toast.LENGTH_SHORT).show();
             } else {
                 binding.btnShuffle.clearColorFilter();
@@ -261,7 +256,6 @@ public class PlayerControlsFragment extends Fragment {
             }
         });
 
-        // SeekBar
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -275,7 +269,7 @@ public class PlayerControlsFragment extends Fragment {
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                exoPlayer.seekTo(seekBar.getProgress());
+                mediaController.seekTo(seekBar.getProgress()); // Sửa
                 handler.post(updateProgressRunnable);
             }
         });
@@ -309,22 +303,23 @@ public class PlayerControlsFragment extends Fragment {
     private void setLoopMode(int mode) {
         currentLoopMode = mode;
         hasLoopedOnce = false;
+        if (mediaController == null) return;
 
         if (mode == LOOP_MODE_OFF) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF); // Tắt lặp
+            mediaController.setRepeatMode(Player.REPEAT_MODE_OFF);
             binding.btnLoop.clearColorFilter();
             binding.btnLoop.setImageResource(R.drawable.ic_loop);
             Toast.makeText(requireContext(), "Loop Off", Toast.LENGTH_SHORT).show();
         } else if (mode == LOOP_MODE_ONE_SHOT) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF); // Vẫn tắt lặp (vì ta tự xử lý)
-            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green)); // Đổi màu
-            binding.btnLoop.setImageResource(R.drawable.ic_repeat_one); // Đổi icon
+            mediaController.setRepeatMode(Player.REPEAT_MODE_OFF);
+            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
+            binding.btnLoop.setImageResource(R.drawable.ic_repeat_one);
             Toast.makeText(requireContext(), "Loop One Shot", Toast.LENGTH_SHORT).show();
         } else if (mode == LOOP_MODE_INFINITE) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // Bật lặp 1 BÀI VÔ HẠN
+            mediaController.setRepeatMode(Player.REPEAT_MODE_ONE);
             binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
-            binding.btnLoop.setImageResource(R.drawable.ic_loop); // Dùng icon lặp thường
-            Toast.makeText(requireContext(), "Loop All (Infinite)", Toast.LENGTH_SHORT).show();
+            binding.btnLoop.setImageResource(R.drawable.ic_loop);
+            Toast.makeText(requireContext(), "Loop Infinite", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -356,8 +351,8 @@ public class PlayerControlsFragment extends Fragment {
         updateProgressRunnable = new Runnable() {
             @Override
             public void run() {
-                if (exoPlayer != null && exoPlayer.isPlaying() && binding != null) {
-                    long currentPosition = exoPlayer.getCurrentPosition();
+                if (mediaController != null && mediaController.isPlaying() && binding != null && isAdded()) {
+                    long currentPosition = mediaController.getCurrentPosition();
                     binding.seekBar.setProgress((int) currentPosition);
                     binding.tvCurrentTime.setText(formatTime(currentPosition));
                     handler.postDelayed(this, 1000);
@@ -367,7 +362,6 @@ public class PlayerControlsFragment extends Fragment {
     }
 
     // --- LOGIC TẢI XUỐNG (Copy từ code cũ) ---
-
     private void checkAndRequestPermission() {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -460,18 +454,13 @@ public class PlayerControlsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Gỡ runnable của seekbar
         if (handler != null) {
             handler.removeCallbacks(updateProgressRunnable);
         }
-
-        // --- SỬA LỖI Ở ĐÂY ---
-        // Gỡ listener ra khỏi player để tránh crash
-        if (exoPlayer != null && playerListener != null) {
-            exoPlayer.removeListener(playerListener);
+        // Gỡ listener
+        if (mediaController != null && playerListener != null) {
+            mediaController.removeListener(playerListener);
         }
-        // --- KẾT THÚC SỬA ---
-
-        binding = null; // Quan trọng: Tránh memory leak
+        binding = null;
     }
 }

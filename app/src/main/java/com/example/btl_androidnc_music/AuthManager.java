@@ -1,6 +1,7 @@
 package com.example.btl_androidnc_music;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
@@ -80,11 +81,8 @@ public class AuthManager {
         editor.remove(KEY_LOGGED_IN_USER);
         editor.apply();
 
-        // <-- THÊM MỚI: Lấy Manager và tắt nhạc -->
-        MusicPlayerManager playerManager = MusicPlayerManager.getInstance(context);
-        if (playerManager != null) {
-            playerManager.stopAndRelease();
-        }
+        Intent intent = new Intent(context, MusicPlayerService.class);
+        context.stopService(intent);
     }
 
     // <-- THÊM HÀM MỚI NÀY -->

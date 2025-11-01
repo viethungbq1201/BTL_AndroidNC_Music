@@ -1,6 +1,7 @@
 package com.example.btl_androidnc_music;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.example.btl_androidnc_music.databinding.FragmentHomeBinding; // Sẽ 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import android.text.TextUtils;
 
 // HomeFragment vẫn implement listener CỦA ADAPTER BÊN TRONG (CategorySongAdapter)
 public class HomeFragment extends Fragment implements CategorySongAdapter.OnSongClickListener {
@@ -51,21 +53,17 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
     private void loadAllCategories() {
         Executors.newSingleThreadExecutor().execute(() -> {
 
-            // <-- THÊM MỚI: Tải tất cả bài hát vào bộ nhớ cache -->
-            // (Đảm bảo bạn đã có hàm getAllTracks() trong TrackDao)
+            // 1. Tải TẤT CẢ bài hát vào bộ nhớ cache
             allTracksCache.clear();
             allTracksCache.addAll(db.trackDao().getAllTracks());
-            // --- KẾT THÚC THÊM MỚI ---
 
-            // 1. Lấy danh sách tên các thể loại duy nhất (Giữ nguyên)
+            // 2. Lấy danh sách tên thể loại (giữ nguyên)
             List<String> genres = db.trackDao().getAllUniqueGenres();
-
             List<CategoryRow> newRows = new ArrayList<>();
 
-            // 2. Với mỗi tên thể loại, lấy danh sách bài hát (Giữ nguyên)
+            // 3. Với mỗi tên thể loại, lấy danh sách bài hát (giữ nguyên)
             for (String genre : genres) {
-                // (Code này sẽ chạy chậm nếu có nhiều thể loại,
-                //  nhưng chúng ta sẽ tối ưu sau nếu cần)
+                // (Đảm bảo TrackDao đã có hàm getTracksByGenre)
                 List<Track> tracksForThisGenre = db.trackDao().getTracksByGenre(genre);
 
                 if (tracksForThisGenre != null && !tracksForThisGenre.isEmpty()) {
@@ -73,7 +71,7 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
                 }
             }
 
-            // 3. Cập nhật UI (Giữ nguyên)
+            // 4. Cập nhật UI (giữ nguyên)
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     categoryRowList.clear();
@@ -84,7 +82,7 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
         });
     }
 
-    // Hàm click này giữ nguyên, nó sẽ được gọi từ adapter BÊN TRONG
+    // --- THAY THẾ TOÀN BỘ HÀM NÀY BẰNG LOGIC "SMART PLAYLIST" ---
     @Override
     public void onSongClick(ArrayList<Track> genreTrackList, int position) {
         // genreTrackList: là danh sách các bài CÙNG THỂ LOẠI (ví dụ: "Pop")
@@ -102,16 +100,15 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
 
         // 4. [Phần 2] Thêm CÁC BÀI CÙNG THỂ LOẠI (trừ bài đã click)
         for (Track track : genreTrackList) {
-            // So sánh bằng ID để đảm bảo không thêm lại bài đã click
             if (track.id != clickedTrack.id) {
                 finalPlaylist.add(track);
             }
         }
 
         // 5. [Phần 3] Thêm TẤT CẢ CÁC BÀI CÒN LẠI (khác thể loại)
+        // (Dùng cache mà chúng ta đã tải ở loadAllCategories)
         if (allTracksCache != null) {
             for (Track track : allTracksCache) {
-                // Dùng TextUtils.equals để so sánh, an toàn với null
                 // Nếu thể loại của bài hát này KHÁC với thể loại đã click
                 if (!TextUtils.equals(track.genre, clickedGenre)) {
                     finalPlaylist.add(track);
@@ -119,13 +116,23 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
             }
         }
 
-        // 6. Mở PlayerActivity với danh sách mới đã sắp xếp
+        // 6. KHỞI ĐỘNG SERVICE (Phần bạn bị thiếu)
+        Intent serviceIntent = new Intent(getActivity(), MusicPlayerService.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("TRACK_LIST", finalPlaylist);
+        bundle.putInt("TRACK_POSITION", 0); // Vị trí luôn là 0
+        serviceIntent.putExtras(bundle);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getActivity().startForegroundService(serviceIntent);
+        } else {
+            getActivity().startService(serviceIntent);
+        }
+
+        // 7. Mở PlayerActivity (vẫn gửi list để Activity xử lý)
         Intent intent = new Intent(getActivity(), PlayerActivity.class);
         intent.putExtra("TRACK_LIST", finalPlaylist);
-
-        // Vị trí luôn là 0, vì bài hát được click đã được đưa lên đầu
         intent.putExtra("TRACK_POSITION", 0);
-
         startActivity(intent);
     }
 }

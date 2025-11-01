@@ -23,7 +23,8 @@ public class CategorySongAdapter extends RecyclerView.Adapter<CategorySongAdapte
 
     // <-- SỬA LẠI: Thêm listener vào constructor -->
     public CategorySongAdapter(List<Track> trackList, OnSongClickListener listener) {
-        this.trackList = trackList;
+        // Chuyển nó thành ArrayList để đảm bảo an toàn khi truyền qua Intent
+        this.trackList = new ArrayList<>(trackList);
         this.listener = listener;
     }
 
@@ -50,10 +51,7 @@ public class CategorySongAdapter extends RecyclerView.Adapter<CategorySongAdapte
 
         // Xử lý click (ví dụ: mở PlayerActivity)
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                // Gửi cả danh sách và vị trí bài hát được click
-                listener.onSongClick(new ArrayList<>(trackList), position);
-            }
+            listener.onSongClick((ArrayList<Track>) trackList, position);
         });
     }
 
