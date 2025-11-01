@@ -200,7 +200,6 @@ class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHolder> {
         ImageView ivAvatar;
         RecyclerView rvReplies;
 
-        @SuppressLint("WrongViewCast")
         public ReplyViewHolder(@NonNull View itemView) {
             super(itemView);
             ivAvatar = itemView.findViewById(R.id.ivUserAvatar);

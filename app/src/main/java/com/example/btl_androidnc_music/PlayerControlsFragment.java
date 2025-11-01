@@ -214,7 +214,25 @@ public class PlayerControlsFragment extends Fragment {
         });
 
         // Next
-        binding.btnNext.setOnClickListener(v -> exoPlayer.seekToNextMediaItem());
+        // Next
+        binding.btnNext.setOnClickListener(v -> {
+            if (exoPlayer.hasNextMediaItem()) {
+                // 1. Nếu còn bài tiếp theo -> Chuyển bài
+                exoPlayer.seekToNextMediaItem();
+            } else {
+                // 2. Đã ở cuối danh sách
+                // Kiểm tra xem chế độ lặp CỦA BẠN có đang TẮT không
+                if (currentLoopMode == LOOP_MODE_OFF) {
+                    // 3. Nếu lặp tắt -> Báo lỗi
+                    Toast.makeText(requireContext(), "Đã hết danh sách phát", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 4. Nếu lặp đang bật (ONE_SHOT hoặc INFINITE)
+                    // Cứ gọi seekToNext, ExoPlayer sẽ tự xử lý (nếu là REPEAT_MODE_ALL)
+                    // Hoặc bạn có thể tự chuyển về bài đầu tiên
+                    exoPlayer.seekTo(0, 0); // Chuyển về bài đầu tiên
+                }
+            }
+        });
 
         // Previous
         binding.btnPrevious.setOnClickListener(v -> exoPlayer.seekToPreviousMediaItem());

@@ -11,6 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
 
@@ -32,6 +35,9 @@ public class CommentsFragment extends Fragment {
 
     private int replyingToCommentId = 0; // 0 = bình luận mới, > 0 = trả lời
     private String replyingToUsername = "";
+    private ExoPlayer exoPlayer; // <-- THÊM BIẾN NÀY
+    private Player.Listener playerListener; // <-- THÊM BIẾN NÀY
+    private boolean isViewCreated = false; // Cờ kiểm tra View
 
     @Nullable
     @Override
@@ -42,20 +48,16 @@ public class CommentsFragment extends Fragment {
                 .fallbackToDestructiveMigration().build();
 
         authManager = new AuthManager(requireContext());
+        exoPlayer = MusicPlayerManager.getInstance(requireContext()).getExoPlayer();
         currentTrack = MusicPlayerManager.getInstance(requireContext()).getCurrentTrack();
 
         setupRecyclerView();
         setupSendButton();
+        setupPlayerListener(); // <-- THÊM MỚI
+
+        isViewCreated = true; // Đánh dấu là View đã được tạo
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Cập nhật trạng thái đăng nhập và tải bình luận mỗi khi tab này được hiển thị
-        checkLoginState();
-        loadComments();
     }
 
     private void checkLoginState() {
@@ -131,17 +133,62 @@ public class CommentsFragment extends Fragment {
         });
     }
 
+    private void setupPlayerListener() {
+        if (exoPlayer == null) return;
+
+        playerListener = new Player.Listener() {
+            public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
+                // Khi bài hát được chuyển, lấy lại track mới
+                currentTrack = MusicPlayerManager.getInstance(requireContext()).getCurrentTrack();
+                // Tải lại bình luận
+                loadComments();
+            }
+        };
+        exoPlayer.addListener(playerListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkLoginState();
+
+        // --- SỬA LẠI CHÚT ---
+        // Cập nhật lại currentTrack và tải comment
+        // (Phòng trường hợp bài hát đã chuyển khi tab này bị ẩn)
+        currentTrack = MusicPlayerManager.getInstance(requireContext()).getCurrentTrack();
+        loadComments();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isViewCreated = false; // Đặt lại cờ
+
+        // Gỡ listener để tránh crash (zombie listener)
+        if (exoPlayer != null && playerListener != null) {
+            exoPlayer.removeListener(playerListener);
+        }
+        binding = null; // Tránh memory leak
+    }
+
     private void loadComments() {
-        if (currentTrack == null) return;
+        // --- THÊM 2 DÒNG KIỂM TRA NÀY ---
+        // Nếu View chưa được tạo (binding=null) hoặc bài hát là null, thì dừng
+        if (!isViewCreated || currentTrack == null) {
+            return;
+        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
             List<CommentWithUser> parentComments = db.commentDao().getParentCommentsForTrack(currentTrack.id);
 
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    commentList.clear();
-                    commentList.addAll(parentComments);
-                    adapter.notifyDataSetChanged();
+                    // Kiểm tra binding một lần nữa
+                    if (binding != null) {
+                        commentList.clear();
+                        commentList.addAll(parentComments);
+                        adapter.notifyDataSetChanged();
+                    }
                 });
             }
         });
