@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="#333333"
+    android:paddingHorizontal="8dp">
+
+    <ImageButton
+        android:id="@+id/btnMiniPlayPause"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_play"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        app:tint="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tvMiniTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Tên Bài Hát"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@id/btnMiniPlayPause"
+        app:layout_constraintEnd_toStartOf="@id/btnMiniFavorite"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvMiniArtist"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <TextView
+        android:id="@+id/tvMiniArtist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Tên Tác Giả"
+        android:textColor="#B3FFFFFF"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="@id/tvMiniTitle"
+        app:layout_constraintEnd_toEndOf="@id/tvMiniTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvMiniTitle"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnMiniFavorite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_favorite_border"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        app:tint="@android:color/white"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@id/btnMiniNext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnMiniNext"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_next"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        app:tint="@android:color/white"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

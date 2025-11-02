@@ -20,7 +20,7 @@
         android:theme="@style/Theme.BTL_AndroidNC_Music"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,15 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".UploadActivity" />
-        <activity android:name=".UploadedMusicActivity" />
-        <activity android:name=".PlayerActivity" />
-        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity android:name=".ui.activity.HomeActivity" />
+        <activity android:name=".ui.activity.UploadActivity" />
+        <activity android:name=".ui.activity.UploadedMusicActivity" />
+        <activity android:name=".ui.activity.PlayerActivity" />
+        <activity android:name=".ui.activity.FavoritesActivity" />
         <service
-            android:name=".MusicPlayerService"
+            android:name=".service.MusicPlayerService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
