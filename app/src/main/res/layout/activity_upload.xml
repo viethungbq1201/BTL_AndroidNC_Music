@@ -3,60 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/bg_light_gradient">
 
     <ImageView
         android:id="@+id/ivImagePreview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:visibility="gone" android:src="@drawable/ic_music_note" />
+        android:background="@drawable/bg_album_art_light"
+        android:padding="8dp"
+        android:src="@drawable/ic_music_note"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnSelectImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Chọn ảnh album" />
+        android:text="Chọn ảnh album"
+        android:backgroundTint="#8E24AA"
+        android:textColor="#FFFFFF"/>
 
     <Button
         android:id="@+id/btnSelectFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chọn file nhạc (.mp3)" />
+        android:layout_marginTop="8dp"
+        android:text="Chọn file nhạc (.mp3)"
+        android:backgroundTint="#8E24AA"
+        android:textColor="#FFFFFF"/>
 
     <TextView
         android:id="@+id/tvSelectedFileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Chưa chọn file nào"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:textColor="#616161" />
 
     <EditText
         android:id="@+id/etTrackName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Tên"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/etArtistName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tác giả" />
+        android:hint="Tác giả"
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/etGenre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Thể loại" />
-
+        android:hint="Thể loại"
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/btnUpload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Tải Lên" />
+        android:text="Tải Lên"
+        android:backgroundTint="#8E24AA"
+        android:textColor="#FFFFFF"/>
 </LinearLayout>

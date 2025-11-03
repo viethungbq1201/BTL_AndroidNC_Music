@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF0000</color>
-    <color name="green">#79C314</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="blue">#487DE7</color>
-    <color name="purple">#9C27B0</color>
-    <color name="orange">#FFA500</color>
+
+    <!-- 🎯 Màu chủ đạo (Primary theme color) -->
+    <color name="colorPrimary">#8E24AA</color>         <!-- tím pastel -->
+    <color name="colorPrimaryDark">#6A1B9A</color>     <!-- tím đậm hơn cho status bar -->
+    <color name="colorAccent">#BA68C8</color>          <!-- tím sáng nhấn nhá -->
+
+    <!-- 🌈 Màu nền (Backgrounds) -->
+    <color name="colorBackground">#B388FF</color>      <!-- nền sáng -->
+    <color name="colorSurface">#F8F6FB</color>         <!-- nền card nhẹ -->
+    <color name="colorDivider">#E0E0E0</color>
+
+    <!-- 📝 Màu chữ -->
+    <color name="textPrimary">#212121</color>          <!-- chữ chính -->
+    <color name="textSecondary">#757575</color>        <!-- chữ phụ -->
+    <color name="textDisabled">#BDBDBD</color>
+
+    <!-- 🖱️ Màu icon -->
+    <color name="iconPrimary">#6A1B9A</color>          <!-- tím đậm -->
+    <color name="iconSecondary">#9C27B0</color>        <!-- tím sáng -->
+    <color name="iconDisabled">#BDBDBD</color>
+
+    <!-- 🪶 Màu cho CardView & Button -->
+    <color name="cardBackground">#F8F3FF</color>
+    <color name="cardStroke">#E1BEE7</color>
+    <color name="buttonBackground">#8E24AA</color>
+    <color name="buttonText">#FFFFFF</color>
+
+    <!-- 💬 Input & field -->
+    <color name="inputBackground">#FFFFFF</color>
+    <color name="inputHint">#9E9E9E</color>
+    <color name="inputStroke">#D1C4E9</color>
+
+    <!-- ❤️ Màu highlight -->
+    <color name="favoriteTint">#E91E63</color>         <!-- hồng cho “Yêu thích” -->
+    <color name="playButton">#8E24AA</color>           <!-- đồng bộ nút phát -->
+    <color name="progressBar">#AB47BC</color>
+
+    <!-- ⚫ Overlay -->
+    <color name="scrimGradientStart">#00000000</color>
+    <color name="scrimGradientEnd">#99000000</color>
+
 </resources>

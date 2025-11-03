@@ -251,7 +251,7 @@ public class PlayerControlsFragment extends Fragment {
             isShuffle = !isShuffle;
             mediaController.setShuffleModeEnabled(isShuffle); // Sửa
             if (isShuffle) {
-                binding.btnShuffle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
+                binding.btnShuffle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.iconPrimary));
                 Toast.makeText(requireContext(), "Shuffle On", Toast.LENGTH_SHORT).show();
             } else {
                 binding.btnShuffle.clearColorFilter();
@@ -315,12 +315,12 @@ public class PlayerControlsFragment extends Fragment {
             Toast.makeText(requireContext(), "Loop Off", Toast.LENGTH_SHORT).show();
         } else if (mode == LOOP_MODE_ONE_SHOT) {
             mediaController.setRepeatMode(Player.REPEAT_MODE_OFF);
-            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
+            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.iconPrimary));
             binding.btnLoop.setImageResource(R.drawable.ic_repeat_one);
             Toast.makeText(requireContext(), "Loop One Shot", Toast.LENGTH_SHORT).show();
         } else if (mode == LOOP_MODE_INFINITE) {
             mediaController.setRepeatMode(Player.REPEAT_MODE_ONE);
-            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green));
+            binding.btnLoop.setColorFilter(ContextCompat.getColor(requireContext(), R.color.iconSecondary));
             binding.btnLoop.setImageResource(R.drawable.ic_loop);
             Toast.makeText(requireContext(), "Loop Infinite", Toast.LENGTH_SHORT).show();
         }

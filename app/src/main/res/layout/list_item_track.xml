@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:strokeColor="#D1C4E9"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +23,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-            android:src="@drawable/ic_music_note" />
+            android:src="@drawable/ic_music_note"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -34,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bật Tình Yêu Lên"
-                android:textColor="@android:color/black"
+                android:textColor="#6A1B9A"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -43,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tăng Duy Tân, Hòa Minzy"
+                android:textColor="#555555"
                 android:textSize="14sp" />
 
             <TextView
@@ -50,14 +55,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3:45"
+                android:textColor="#888888"
                 android:textSize="12sp" />
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/btnMoreOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_more_vert" />
+            android:src="@drawable/ic_more_vert"
+            app:tint="#8E24AA" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

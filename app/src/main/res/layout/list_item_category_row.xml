@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="16dp">
+    android:layout_marginTop="16dp"
+    android:background="@drawable/bg_light_gradient">
 
     <TextView
         android:id="@+id/tvCategoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thể loại"
-        android:textSize="30sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="#8E24AA"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"/>
 

@@ -5,45 +5,55 @@
     android:layout_width="150dp"
     android:layout_height="150dp"
     android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="@color/cardBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Ảnh bìa bài hát -->
         <ImageView
             android:id="@+id/ivCoverArt"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_music_note"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Lớp phủ gradient pastel tím nhạt để đồng bộ với player -->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/gradient_scrim_bottom"
+            android:alpha="0.4"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Tên bài hát -->
         <TextView
             android:id="@+id/tvSongTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Tên bài hát"
-            android:textColor="@android:color/white"
+            android:textColor="@color/textPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:shadowColor="#33000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="1.5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

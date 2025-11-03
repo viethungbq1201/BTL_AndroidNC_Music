@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@drawable/bg_light_gradient">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,6 +13,7 @@
         android:text="Đăng Ký"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#8E24AA"
         android:layout_marginBottom="40dp"/>
 
     <EditText
@@ -19,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email/số điện thoại"
-        android:inputType="textEmailAddress" />
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -27,7 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Mật khẩu"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/etConfirmPassword"
@@ -35,20 +40,24 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Nhập Lại Mật khẩu"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:background="@drawable/bg_album_art_light"
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="ĐĂNG KÝ" />
+        android:text="ĐĂNG KÝ"
+        android:backgroundTint="#8E24AA"
+        android:textColor="#FFFFFF"/>
 
     <TextView
         android:id="@+id/tvGoToLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Bạn có tài khoản khác? Đăng nhập ngay" />
-
+        android:text="Bạn có tài khoản khác? Đăng nhập ngay"
+        android:textColor="#6A1B9A" />
 </LinearLayout>

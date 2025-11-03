@@ -5,8 +5,10 @@
     android:layout_height="wrap_content"
     android:text="Search Query"
     android:textSize="16sp"
+    android:textColor="#212121"
     android:paddingVertical="12dp"
     android:paddingHorizontal="16dp"
     android:drawableStart="@drawable/ic_history"
     android:drawablePadding="16dp"
+    android:background="@drawable/bg_album_art_light"
     android:gravity="center_vertical"/>

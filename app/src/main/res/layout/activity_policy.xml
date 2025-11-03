@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@drawable/bg_light_gradient"
     tools:context=".ui.activity.PolicyActivity">
 
     <TextView
@@ -13,6 +14,7 @@
         android:text="Điều khoản sử dụng ứng dụng"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="#8E24AA"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"/>
 
@@ -28,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/long_policy_text"
-            android:lineSpacingMultiplier="1.2"
+            android:lineSpacingMultiplier="1.3"
+            android:textColor="#424242"
             android:textSize="16sp"/>
     </ScrollView>
 
@@ -46,7 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Từ chối"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:backgroundTint="#E57373"
+            android:textColor="#FFFFFF"
             android:layout_marginEnd="8dp"/>
 
         <Button
@@ -55,9 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Chấp nhận"
+            android:backgroundTint="#8E24AA"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="8dp"
             android:visibility="invisible"
-            tools:visibility="visible"
-            android:layout_marginStart="8dp"/>
+            tools:visibility="visible"/>
     </LinearLayout>
-
 </RelativeLayout>
