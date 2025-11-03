@@ -1,3 +1,57 @@
 <resources>
     <string name="app_name">BTL_AndroidNC_Music</string>
+    <string name="long_policy_text">
+        "Chào mừng bạn đến với ứng dụng nghe nhạc của chúng tôi. Bằng cách sử dụng ứng dụng này, bạn đồng ý tuân thủ các điều khoản và điều kiện sau đây:\n\n"
+
+        "1. Bản quyền và Sở hữu trí tuệ:\n"
+        "   - Tất cả các bài hát, album và nội dung âm nhạc có sẵn trên ứng dụng đều thuộc bản quyền của các nghệ sĩ, nhà sản xuất và các bên liên quan. Việc sử dụng nội dung này cho mục đích thương mại mà không có sự cho phép là vi phạm pháp luật.\n"
+        "   - Người dùng có thể tải lên các bản nhạc cá nhân. Bằng cách tải lên, bạn cam đoan rằng bạn có toàn quyền sở hữu hoặc đã được cấp phép hợp pháp để sử dụng và chia sẻ nội dung đó. Chúng tôi không chịu trách nhiệm về bất kỳ tranh chấp bản quyền nào phát sinh từ nội dung do người dùng tải lên.\n\n"
+
+        "2. Quy tắc sử dụng:\n"
+        "   - Ứng dụng được cung cấp cho mục đích giải trí cá nhân, phi thương mại.\n"
+        "   - Nghiêm cấm mọi hành vi sử dụng ứng dụng để phân phối nội dung bất hợp pháp, vi phạm bản quyền, có tính chất phỉ báng, quấy rối hoặc gây hại cho người khác.\n"
+        "   - Không được phép sử dụng các công cụ tự động để truy cập, trích xuất dữ liệu hoặc tấn công vào hệ thống của chúng tôi.\n"
+        "   - Người dùng có trách nhiệm bảo vệ thông tin tài khoản và không chia sẻ thông tin đăng nhập với người khác.\n\n"
+
+        "3. Định dạng và Chất lượng:\n"
+        "   - Ứng dụng hỗ trợ các định dạng âm thanh phổ biến như MP3, M4A, FLAC. Chúng tôi không đảm bảo tất cả các file âm thanh sẽ hoạt động hoàn hảo.\n"
+        "   - Chất lượng phát nhạc có thể phụ thuộc vào chất lượng file gốc do người dùng tải lên và kết nối mạng của bạn.\n"
+        "   - Một số tính năng có thể yêu cầu đường truyền Internet ổn định hoặc gói cước dữ liệu di động, bạn chịu trách nhiệm cho chi phí phát sinh.\n\n"
+
+        "4. Giới hạn trách nhiệm:\n"
+        "   - Chúng tôi nỗ lực để cung cấp một dịch vụ ổn định, tuy nhiên không thể đảm bảo ứng dụng sẽ hoạt động liên tục mà không có lỗi.\n"
+        "   - Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại nào (trực tiếp hoặc gián tiếp) phát sinh từ việc sử dụng hoặc không thể sử dụng ứng dụng.\n"
+        "   - Trong mọi trường hợp, trách nhiệm của chúng tôi (nếu có) sẽ không vượt quá tổng số tiền bạn đã thanh toán để sử dụng dịch vụ trong thời gian 12 tháng gần nhất.\n\n"
+
+        "5. Thay đổi điều khoản:\n"
+        "   - Chúng tôi có quyền thay đổi các điều khoản này vào bất kỳ lúc nào. Các thay đổi sẽ có hiệu lực ngay khi được đăng tải.\n"
+        "   - Việc bạn tiếp tục sử dụng ứng dụng sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới.\n\n"
+
+        "6. Bảo mật và Quyền riêng tư:\n"
+        "   - Chúng tôi cam kết bảo vệ quyền riêng tư của người dùng. Mọi thông tin cá nhân được thu thập sẽ chỉ được sử dụng cho mục đích vận hành và cải thiện dịch vụ.\n"
+        "   - Chúng tôi không bán, cho thuê hoặc chia sẻ thông tin cá nhân của bạn với bên thứ ba nếu không có sự đồng ý của bạn, trừ khi được yêu cầu bởi cơ quan pháp luật.\n"
+        "   - Bạn có thể yêu cầu xem, chỉnh sửa hoặc xóa dữ liệu cá nhân của mình bằng cách liên hệ với bộ phận hỗ trợ.\n\n"
+
+        "7. Tài khoản và Bảo mật đăng nhập:\n"
+        "   - Người dùng phải cung cấp thông tin chính xác khi đăng ký tài khoản.\n"
+        "   - Bạn có trách nhiệm bảo mật thông tin tài khoản của mình và thông báo ngay cho chúng tôi khi phát hiện hoạt động bất thường.\n"
+        "   - Chúng tôi có quyền tạm ngưng hoặc chấm dứt tài khoản nếu phát hiện hành vi vi phạm điều khoản sử dụng.\n\n"
+
+        "8. Thanh toán và Dịch vụ cao cấp (nếu có):\n"
+        "   - Một số tính năng hoặc nội dung có thể yêu cầu thanh toán hoặc đăng ký gói dịch vụ cao cấp.\n"
+        "   - Tất cả các khoản thanh toán sẽ được xử lý qua bên cung cấp dịch vụ thanh toán an toàn và đáng tin cậy.\n"
+        "   - Phí dịch vụ không được hoàn lại trừ khi có quy định khác được nêu rõ.\n\n"
+
+        "9. Hỗ trợ kỹ thuật và Phản hồi:\n"
+        "   - Chúng tôi cung cấp kênh hỗ trợ khách hàng để giải đáp thắc mắc và khắc phục sự cố kỹ thuật.\n"
+        "   - Mọi góp ý, phản hồi của bạn sẽ giúp chúng tôi cải thiện chất lượng ứng dụng.\n"
+        "   - Chúng tôi có quyền sử dụng các ý tưởng hoặc đề xuất mà bạn gửi đến mà không cần trả thêm phí.\n\n"
+
+        "10. Luật áp dụng và Giải quyết tranh chấp:\n"
+        "   - Các điều khoản này được điều chỉnh bởi pháp luật Việt Nam.\n"
+        "   - Mọi tranh chấp phát sinh sẽ được ưu tiên giải quyết thông qua thương lượng. Nếu không đạt được thỏa thuận, tranh chấp sẽ được đưa ra cơ quan có thẩm quyền tại Việt Nam để giải quyết.\n\n"
+
+        "Vui lòng cuộn xuống cuối để xác nhận bạn đã đọc, hiểu và đồng ý với tất cả các điều khoản trên. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!"
+</string>
+
 </resources>

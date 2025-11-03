@@ -2,7 +2,6 @@ package com.example.btl_androidnc_music.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,16 +31,23 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            // SỬ DỤNG HÀM login() TỪ AUTHMANAGER
-            // Hàm này sẽ tự động lưu email nếu đăng nhập thành công
             if (authManager.loginUser(email, password)) {
-
                 // Đăng nhập thành công
                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish(); // Đóng LoginActivity
+                // --- SỬA LOGIC ĐIỀU HƯỚNG Ở ĐÂY ---
+                // Kiểm tra xem đã đồng ý điều khoản chưa
+                if (authManager.hasAcceptedPolicy()) {
+                    // Nếu rồi -> Vào thẳng Home
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                } else {
+                    // Nếu chưa -> Vào màn hình Điều khoản
+                    startActivity(new Intent(LoginActivity.this, PolicyActivity.class));
+                }
+
+                finish(); // Đóng LoginActivity trong mọi trường hợp
+                // --- KẾT THÚC SỬA ---
+
             } else {
                 // Đăng nhập thất bại
                 Toast.makeText(this, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
@@ -53,27 +59,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
-    }
-
-    private void loginUser() {
-        String email = binding.etEmail.getText().toString().trim();
-        String password = binding.etPassword.getText().toString().trim();
-
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Kiểm tra thông tin
-        if (authManager.loginUser(email, password)) {
-            // Đăng nhập thành công
-            authManager.setLoggedIn(true); // Lưu trạng thái đăng nhập
-            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            goToHome();
-        } else {
-            // Đăng nhập thất bại
-            Toast.makeText(this, "Email hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void goToHome() {

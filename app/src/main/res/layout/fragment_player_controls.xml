@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:padding="24dp">
 
     <ImageView
@@ -13,27 +13,29 @@
         android:layout_marginTop="20dp"
         android:background="#E0E0E0"
         android:src="@drawable/ic_music_note" />
+
     <TextView
         android:id="@+id/tvSongTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="HAVANA"
         android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvSongArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Camila Cabello, Young Thug"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="32dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,15 +59,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:layout_marginTop="24dp">
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btnFavorite"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_favorite_border" />
+
         <ImageButton
             android:id="@+id/btnDownload"
             android:layout_width="60dp"
@@ -77,33 +80,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:layout_marginTop="24dp">
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btnShuffle"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_shuffle" />
+
         <ImageButton
             android:id="@+id/btnPrevious"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_previous" />
+
         <ImageButton
             android:id="@+id/btnPlayPause"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_play" />
+
         <ImageButton
             android:id="@+id/btnNext"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_next" />
+
         <ImageButton
             android:id="@+id/btnLoop"
             android:layout_width="48dp"

@@ -18,6 +18,7 @@ public class AuthManager {
     private static final String KEY_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_LOGGED_IN_USER = "logged_in_user";
+    private static final String KEY_POLICY_ACCEPTED = "policy_accepted";
 
     private SharedPreferences sharedPreferences;
 
@@ -88,8 +89,21 @@ public class AuthManager {
         context.stopService(intent);
     }
 
-    // <-- THÊM HÀM MỚI NÀY -->
     public String getLoggedInUsername() {
         return sharedPreferences.getString(KEY_LOGGED_IN_USER, null);
+    }
+     //Lưu trạng thái người dùng đã đồng ý điều khoản
+    public void setPolicyAccepted(boolean accepted) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_POLICY_ACCEPTED, accepted);
+        editor.apply();
+    }
+
+    /**
+     * Kiểm tra xem người dùng đã đồng ý điều khoản chưa
+     * @return true nếu đã đồng ý, false nếu chưa
+     */
+    public boolean hasAcceptedPolicy() {
+        return sharedPreferences.getBoolean(KEY_POLICY_ACCEPTED, false);
     }
 }
