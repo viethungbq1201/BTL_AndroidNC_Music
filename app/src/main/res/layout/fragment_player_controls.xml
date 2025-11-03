@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    android:background="@drawable/bg_light_gradient">
 
+    <!-- Ảnh bìa bài hát -->
     <ImageView
         android:id="@+id/ivCoverArt"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:background="#E0E0E0"
+        android:background="@drawable/bg_album_art_light"
+        android:elevation="8dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_music_note" />
 
+    <!-- Tiêu đề bài hát -->
     <TextView
         android:id="@+id/tvSongTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="HAVANA"
+        android:textColor="#212121"
         android:textSize="22sp"
         android:textStyle="bold" />
 
+    <!-- Nghệ sĩ -->
     <TextView
         android:id="@+id/tvSongArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Camila Cabello, Young Thug"
+        android:textColor="#616161"
         android:textSize="16sp" />
 
+    <!-- Thanh tiến trình -->
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="32dp"
+        android:progressTint="#6200EE"
+        android:thumbTint="#9C27B0" />
 
+    <!-- Thời gian bài hát -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,16 +59,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:text="0:00" />
+            android:text="0:00"
+            android:textColor="#757575" />
 
         <TextView
             android:id="@+id/tvTotalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="0:00" />
+            android:text="0:00"
+            android:textColor="#757575" />
     </RelativeLayout>
 
+    <!-- Nút yêu thích và tải xuống -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,16 +83,21 @@
             android:id="@+id/btnFavorite"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_favorite_border" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_favorite_border"
+            app:tint="#6200EE" />
 
         <ImageButton
             android:id="@+id/btnDownload"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#6200EE"
             android:src="@drawable/ic_download" />
     </LinearLayout>
 
+    <!-- Các nút điều khiển phát nhạc -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,6 +109,8 @@
             android:id="@+id/btnShuffle"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#616161"
             android:src="@drawable/ic_shuffle" />
 
         <ImageButton
@@ -95,6 +118,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#212121"
             android:src="@drawable/ic_previous" />
 
         <ImageButton
@@ -102,6 +127,8 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginStart="16dp"
+            android:background="@drawable/bg_play_button_light"
+            app:tint="#FFFFFF"
             android:src="@drawable/ic_play" />
 
         <ImageButton
@@ -109,6 +136,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#212121"
             android:src="@drawable/ic_next" />
 
         <ImageButton
@@ -116,7 +145,9 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#616161"
             android:src="@drawable/ic_loop" />
-
     </LinearLayout>
+
 </LinearLayout>

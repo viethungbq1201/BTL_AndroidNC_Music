@@ -83,6 +83,7 @@ public class AuthManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(KEY_IS_LOGGED_IN);
         editor.remove(KEY_LOGGED_IN_USER);
+        editor.remove(KEY_POLICY_ACCEPTED);
         editor.apply();
 
         Intent intent = new Intent(context, MusicPlayerService.class);
