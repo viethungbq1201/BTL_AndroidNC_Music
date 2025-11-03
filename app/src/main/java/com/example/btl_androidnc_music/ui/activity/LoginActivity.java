@@ -35,17 +35,21 @@ public class LoginActivity extends AppCompatActivity {
                 // Đăng nhập thành công
                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                // --- SỬA LOGIC ĐIỀU HƯỚNG Ở ĐÂY ---
-                // Kiểm tra xem đã đồng ý điều khoản chưa
-                if (authManager.hasAcceptedPolicy()) {
-                    // Nếu rồi -> Vào thẳng Home
+                // --- SỬA LẠI LOGIC ĐIỀU HƯỚNG ---
+
+                // 1. Kiểm tra policy CỦA CHÍNH USER NÀY
+                if (authManager.hasAcceptedPolicy(email)) {
+                    // 2. Nếu rồi -> Vào thẳng Home
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 } else {
-                    // Nếu chưa -> Vào màn hình Điều khoản
-                    startActivity(new Intent(LoginActivity.this, PolicyActivity.class));
+                    // 3. Nếu chưa -> Vào màn hình Điều khoản
+                    Intent policyIntent = new Intent(LoginActivity.this, PolicyActivity.class);
+                    // 4. GỬI KÈM EMAIL để PolicyActivity biết ai đã đồng ý
+                    policyIntent.putExtra("USER_EMAIL", email);
+                    startActivity(policyIntent);
                 }
 
-                finish(); // Đóng LoginActivity trong mọi trường hợp
+                finish(); // Đóng LoginActivity
                 // --- KẾT THÚC SỬA ---
 
             } else {
