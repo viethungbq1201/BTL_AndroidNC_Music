@@ -114,8 +114,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView tvUsername, tvTimestamp, tvContent, tvLikeCount, btnReply;
-        ImageButton btnLike;
-        ImageView ivAvatar;
+        ImageView ivAvatar, btnLike;
         RecyclerView rvReplies;
 
         public CommentViewHolder(@NonNull View itemView) {
@@ -198,8 +197,7 @@ class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHolder> {
 
     class ReplyViewHolder extends RecyclerView.ViewHolder {
         TextView tvUsername, tvTimestamp, tvContent, tvLikeCount, btnReply;
-        ImageButton btnLike;
-        ImageView ivAvatar;
+        ImageView ivAvatar, btnLike;
         RecyclerView rvReplies;
 
         public ReplyViewHolder(@NonNull View itemView) {
