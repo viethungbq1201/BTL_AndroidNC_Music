@@ -12,7 +12,7 @@ public class Track implements Serializable {
     public String title;
     public String artist;
     public String genre;
-    public String filePath; // <-- Rất quan trọng: Đây là đường dẫn file trong internal storage
+    public String filePath; // Đây là đường dẫn file trong internal storage
     public boolean isFavorite = false;
     public String imagePath;
     public String duration;

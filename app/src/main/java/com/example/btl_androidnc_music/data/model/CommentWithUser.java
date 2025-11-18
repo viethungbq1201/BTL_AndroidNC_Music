@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.data.model; // Thay package của bạn
+package com.example.btl_androidnc_music.data.model;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;

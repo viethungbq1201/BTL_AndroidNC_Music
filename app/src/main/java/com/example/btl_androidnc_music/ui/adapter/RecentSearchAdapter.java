@@ -15,19 +15,19 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
 
     private List<String> queries;
     private OnItemClickListener clickListener;
-    private OnItemLongClickListener longClickListener; // <-- THÊM MỚI
+    private OnItemLongClickListener longClickListener;
 
     // Interface cho sự kiện Click
     public interface OnItemClickListener {
         void onItemClick(String query);
     }
 
-    // <-- THÊM MỚI: Interface cho sự kiện Long Click -->
+    // Interface cho sự kiện Long Click
     public interface OnItemLongClickListener {
         void onItemLongClick(String query, int position);
     }
 
-    // <-- SỬA LẠI: Cập nhật Constructor -->
+    // Cập nhật Constructor
     public RecentSearchAdapter(List<String> queries, OnItemClickListener clickListener, OnItemLongClickListener longClickListener) {
         this.queries = queries;
         this.clickListener = clickListener;
@@ -49,11 +49,11 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
         // Sự kiện click (giữ nguyên)
         holder.itemView.setOnClickListener(v -> clickListener.onItemClick(query));
 
-        // <-- THÊM MỚI: Sự kiện long click (nhấn giữ) -->
+        // Sự kiện long click (nhấn giữ)
         holder.itemView.setOnLongClickListener(v -> {
             if (longClickListener != null) {
                 longClickListener.onItemLongClick(query, position);
-                return true; // Đánh dấu là đã xử lý
+                return true;
             }
             return false;
         });

@@ -51,7 +51,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
 
     class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
-        RecyclerView rvInner; // RecyclerView cuộn ngang
+        RecyclerView rvInner;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);

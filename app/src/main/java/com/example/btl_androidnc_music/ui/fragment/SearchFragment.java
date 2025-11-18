@@ -22,7 +22,7 @@ import androidx.room.Room;
 import com.example.btl_androidnc_music.ui.adapter.TrackAdapter;
 import com.example.btl_androidnc_music.data.db.AppDatabase;
 import com.example.btl_androidnc_music.data.model.Track;
-import com.example.btl_androidnc_music.databinding.FragmentSearchBinding; // Thay package của bạn
+import com.example.btl_androidnc_music.databinding.FragmentSearchBinding;
 import com.example.btl_androidnc_music.ui.activity.PlayerActivity;
 import com.example.btl_androidnc_music.ui.adapter.CategoryGridAdapter;
 import com.example.btl_androidnc_music.ui.adapter.RecentSearchAdapter;
@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
     private List<String> recentSearchesList = new ArrayList<>();
     private List<String> categoriesList = new ArrayList<>();
 
-    private boolean isProgrammaticTextChange = false; // Flag để tránh TextWatcher
+    private boolean isProgrammaticTextChange = false;
 
     @Nullable
     @Override
@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment {
 
                 // Click vào bài hát
                 position -> {
-                    // SỬA: Chỉ lưu lịch sử khi người dùng CHỌN 1 BÀI HÁT
+                    // Chỉ lưu lịch sử khi người dùng CHỌN 1 BÀI HÁT
                     String query = binding.etSearch.getText().toString().trim();
                     if (!query.isEmpty()) {
                         historyManager.saveSearchQuery(query);
@@ -88,9 +88,9 @@ public class SearchFragment extends Fragment {
                 // Nút "..." (Sửa/Xóa)
                 new TrackAdapter.OnTrackOptionsClickListener() {
                     @Override
-                    public void onEditClick(Track track) { /* Để trống */ }
+                    public void onEditClick(Track track) {  }
                     @Override
-                    public void onDeleteClick(Track track, int position) { /* Để trống */ }
+                    public void onDeleteClick(Track track, int position) {  }
                 },
 
                 false // Ẩn nút "..."
@@ -98,7 +98,7 @@ public class SearchFragment extends Fragment {
         binding.rvSearchResults.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvSearchResults.setAdapter(searchResultAdapter);
 
-        // 2. Tìm kiếm gần đây (SỬA LẠI: Thêm listener cho Long Click)
+        // 2. Tìm kiếm gần đây
         recentSearchAdapter = new RecentSearchAdapter(recentSearchesList,
                 // Click: Điền vào ô tìm kiếm
                 query -> {
@@ -113,7 +113,7 @@ public class SearchFragment extends Fragment {
         binding.rvRecentSearches.setLayoutManager(new LinearLayoutManager(requireContext())); // Sửa lại layout
         binding.rvRecentSearches.setAdapter(recentSearchAdapter);
 
-        // 3. Thể loại (Giữ nguyên logic cũ)
+        // 3. Thể loại
         categoryGridAdapter = new CategoryGridAdapter(categoriesList, category -> {
             isProgrammaticTextChange = true;
             binding.etSearch.setText(category);
@@ -148,7 +148,7 @@ public class SearchFragment extends Fragment {
 
     // Cài đặt listener cho ô tìm kiếm
     private void setupSearchBox() {
-        // SỬA 1: Xử lý khi nhấn "Enter/Search" trên bàn phím
+        // Xử lý khi nhấn "Enter/Search" trên bàn phím
         binding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String query = binding.etSearch.getText().toString().trim();
@@ -157,14 +157,13 @@ public class SearchFragment extends Fragment {
                     historyManager.saveSearchQuery(query);
                     // 2. Ẩn bàn phím
                     hideKeyboard();
-                    // 3. (Hàm performNameSearch đã được gọi bởi TextWatcher rồi)
                 }
                 return true;
             }
             return false;
         });
 
-        // SỬA 2: Cập nhật TextWatcher
+        // Cập nhật TextWatcher
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -181,7 +180,7 @@ public class SearchFragment extends Fragment {
                 if (query.isEmpty()) {
                     // Nếu không nhập gì
                     toggleLayout(false);
-                    // SỬA 3: Tải lại "Gần đây" để cập nhật list
+                    // Tải lại "Gần đây" để cập nhật list
                     loadDefaultData();
                 } else {
                     // Nếu có nhập
@@ -203,7 +202,6 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    // SỬA: Hàm này giờ CHỈ tìm kiếm, không lưu lịch sử
     private void performNameSearch(String query) {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Track> results = db.trackDao().searchTracks(query);
@@ -217,13 +215,11 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    // Hàm tìm theo thể loại (Giữ nguyên)
+    // Hàm tìm theo thể loại
     private void performGenreSearch(String genre) {
         // Chạy trên luồng nền
         Executors.newSingleThreadExecutor().execute(() -> {
 
-            // Gọi đúng hàm DAO: getTracksByGenre
-            // Hàm này sẽ tìm chính xác thể loại (ví dụ: "123")
             List<Track> results = db.trackDao().getTracksByGenre(genre);
 
             if (getActivity() != null) {
@@ -238,9 +234,8 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    // --- THÊM CÁC HÀM HELPER MỚI ---
 
-    // THÊM: Hiển thị dialog xác nhận xóa
+    // Hiển thị dialog xác nhận xóa
     private void showDeleteHistoryDialog(String query, int position) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Xóa tìm kiếm")
@@ -254,7 +249,7 @@ public class SearchFragment extends Fragment {
                 .show();
     }
 
-    // THÊM: Ẩn bàn phím
+    // Ẩn bàn phím
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         View view = getActivity().getCurrentFocus();

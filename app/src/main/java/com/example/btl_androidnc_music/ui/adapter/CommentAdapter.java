@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.ui.adapter; // Thay package của bạn
+package com.example.btl_androidnc_music.ui.adapter;
 
 import android.content.Context;
 import android.text.format.DateUtils;
@@ -27,7 +27,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<CommentWithUser> commentList;
     private CommentDao commentDao;
     private OnReplyClickListener replyClickListener;
-    private Context context; // Thêm Context
+    private Context context;
 
     public interface OnReplyClickListener {
         void onReplyClick(CommentWithUser parentComment);
@@ -62,7 +62,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
 
         holder.tvContent.setText(comment.content);
-        holder.tvTimestamp.setText(formatTimestamp(comment.timestamp)); // Dùng hàm format mới
+        holder.tvTimestamp.setText(formatTimestamp(comment.timestamp));
         holder.tvLikeCount.setText(String.valueOf(comment.likeCount));
 
         holder.btnReply.setOnClickListener(v -> replyClickListener.onReplyClick(commentWithUser));
@@ -70,7 +70,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.btnLike.setOnClickListener(v -> {
             comment.likeCount++;
             holder.tvLikeCount.setText(String.valueOf(comment.likeCount));
-            // (Tạm thời chưa xử lý trạng thái đã like)
             Executors.newSingleThreadExecutor().execute(() -> commentDao.updateComment(comment));
         });
 
@@ -95,7 +94,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         });
     }
 
-    // Hàm format thời gian đẹp hơn (ví dụ: "vừa xong", "5 phút trước")
+    // Hàm format thời gian
     private String formatTimestamp(long timestamp) {
         try {
             long now = System.currentTimeMillis();

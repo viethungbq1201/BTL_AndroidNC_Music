@@ -11,18 +11,17 @@ import java.util.List;
 public class SearchHistoryManager {
 
     private static final String PREFS_NAME = "search_history_prefs";
-    private static final String KEY_HISTORY = "search_history_json"; // Đổi tên key
+    private static final String KEY_HISTORY = "search_history_json";
     private SharedPreferences sharedPreferences;
-    private Gson gson; // Thêm Gson
+    private Gson gson;
 
     public SearchHistoryManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         gson = new Gson();
     }
 
-    /**
-     * Lấy danh sách lịch sử từ JSON string
-     */
+
+    // Lấy danh sách lịch sử từ JSON string
     public List<String> getSearchHistory() {
         String jsonHistory = sharedPreferences.getString(KEY_HISTORY, null);
         if (jsonHistory == null) {
@@ -34,9 +33,7 @@ public class SearchHistoryManager {
         return gson.fromJson(jsonHistory, type);
     }
 
-    /**
-     * Lưu một từ khóa mới
-     */
+    // Lưu một từ khóa mới
     public void saveSearchQuery(String query) {
         if (query == null || query.trim().isEmpty()) {
             return;
@@ -65,7 +62,6 @@ public class SearchHistoryManager {
         sharedPreferences.edit().putString(KEY_HISTORY, jsonHistory).apply();
     }
 
-    // (Bạn có thể thêm hàm xóa lịch sử nếu muốn)
     public void deleteSearchQuery(String query) {
         if (query == null || query.trim().isEmpty()) {
             return;

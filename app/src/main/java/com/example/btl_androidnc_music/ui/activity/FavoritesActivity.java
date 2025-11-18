@@ -2,6 +2,7 @@ package com.example.btl_androidnc_music.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,10 +34,15 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+
         rvTracks = findViewById(R.id.rvTracks);
         db = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "music-db")
-                .fallbackToDestructiveMigration() // <-- THÊM DÒNG NÀY
+                .fallbackToDestructiveMigration()
                 .build();
 
         setupRecyclerView();
@@ -73,7 +79,6 @@ public class FavoritesActivity extends AppCompatActivity {
     };
     private void setupRecyclerView() {
         adapter = new TrackAdapter(trackList, position -> {
-            // *** XỬ LÝ KHI CLICK VÀO BÀI HÁT ***
             // 1. Mở PlayerActivity
             Intent intent = new Intent(FavoritesActivity.this, PlayerActivity.class);
 

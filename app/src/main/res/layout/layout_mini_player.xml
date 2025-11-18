@@ -5,7 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:background="#F3E5F5"
-    android:paddingHorizontal="8dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
+
+    <ImageView
+        android:id="@+id/ivMiniCoverArt"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_music_note"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_album_art_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageButton
         android:id="@+id/btnMiniPlayPause"
@@ -15,7 +27,8 @@
         app:tint="#8E24AA"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerInside"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/ivMiniCoverArt"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -28,6 +41,7 @@
         android:textSize="14sp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/btnMiniPlayPause"
         app:layout_constraintEnd_toStartOf="@id/btnMiniFavorite"
         app:layout_constraintTop_toTopOf="parent"

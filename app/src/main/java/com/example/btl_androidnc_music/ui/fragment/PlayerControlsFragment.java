@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.ui.fragment; // <-- THAY PACKAGE CỦA BẠN
+package com.example.btl_androidnc_music.ui.fragment;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
-import androidx.media3.session.MediaController; // <-- SỬA: Import MediaController
+import androidx.media3.session.MediaController;
 import androidx.room.Room;
 
 import com.example.btl_androidnc_music.R;
@@ -45,13 +46,13 @@ import java.util.concurrent.TimeUnit;
 public class PlayerControlsFragment extends Fragment {
 
     private FragmentPlayerControlsBinding binding;
-    private MediaController mediaController; // <-- SỬA: Dùng MediaController
+    private MediaController mediaController;
     private AppDatabase db;
     private Track mCurrentTrack;
 
     private Handler handler;
     private Runnable updateProgressRunnable;
-    private Player.Listener playerListener; // Biến listener
+    private Player.Listener playerListener;
 
     // Các biến trạng thái cho Loop
     private static final int LOOP_MODE_OFF = 0;
@@ -91,12 +92,18 @@ public class PlayerControlsFragment extends Fragment {
         binding = FragmentPlayerControlsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        ImageButton btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        });
+
         db = Room.databaseBuilder(requireContext(), AppDatabase.class, "music-db")
                 .fallbackToDestructiveMigration().build();
 
         // Lấy MediaController từ PlayerActivity (cha của nó)
         if (getActivity() != null) {
-            // SỬA: Gọi đúng tên hàm mới
             mediaController = ((PlayerActivity) getActivity()).getServiceMediaController();
         }
 
@@ -118,14 +125,13 @@ public class PlayerControlsFragment extends Fragment {
         return view;
     }
 
-    // SỬA HÀM NÀY (Vì giờ ta lấy Track từ DB)
     private void updateUiForNewTrack() {
         if (mediaController == null || binding == null || !isAdded()) return;
 
         MediaItem currentItem = mediaController.getCurrentMediaItem();
         if (currentItem == null || currentItem.mediaId == null) return;
 
-        // Lấy track ID từ MediaItem (chúng ta đã gán nó ở PlayerActivity)
+        // Lấy track ID từ MediaItem
         int trackId;
         try {
             trackId = Integer.parseInt(currentItem.mediaId);
@@ -135,7 +141,7 @@ public class PlayerControlsFragment extends Fragment {
 
         // Lấy thông tin Track đầy đủ từ DB (chạy nền)
         Executors.newSingleThreadExecutor().execute(() -> {
-            mCurrentTrack = db.trackDao().getTrackById(trackId); // <-- **CẦN THÊM HÀM NÀY VÀO DAO**
+            mCurrentTrack = db.trackDao().getTrackById(trackId);
 
             if (mCurrentTrack != null && getActivity() != null) {
                 // Cập nhật UI trên luồng chính
@@ -156,7 +162,6 @@ public class PlayerControlsFragment extends Fragment {
         });
     }
 
-    // SỬA HÀM NÀY (Đổi exoPlayer -> mediaController)
     private void setupPlayerListener() {
         if (mediaController == null) return;
 
@@ -215,7 +220,6 @@ public class PlayerControlsFragment extends Fragment {
         }
     }
 
-    // SỬA HÀM NÀY (Đổi exoPlayer -> mediaController)
     private void setupClickListeners() {
         binding.btnPlayPause.setOnClickListener(v -> {
             if (mediaController.isPlaying()) {
@@ -249,7 +253,7 @@ public class PlayerControlsFragment extends Fragment {
 
         binding.btnShuffle.setOnClickListener(v -> {
             isShuffle = !isShuffle;
-            mediaController.setShuffleModeEnabled(isShuffle); // Sửa
+            mediaController.setShuffleModeEnabled(isShuffle);
             if (isShuffle) {
                 binding.btnShuffle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.iconPrimary));
                 Toast.makeText(requireContext(), "Shuffle On", Toast.LENGTH_SHORT).show();
@@ -272,7 +276,7 @@ public class PlayerControlsFragment extends Fragment {
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mediaController.seekTo(seekBar.getProgress()); // Sửa
+                mediaController.seekTo(seekBar.getProgress());
                 handler.post(updateProgressRunnable);
             }
         });
@@ -364,7 +368,7 @@ public class PlayerControlsFragment extends Fragment {
         };
     }
 
-    // --- LOGIC TẢI XUỐNG (Copy từ code cũ) ---
+    // Logic tải xuống
     private void checkAndRequestPermission() {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

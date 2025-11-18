@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -39,11 +40,16 @@ public class UploadedMusicActivity extends AppCompatActivity implements TrackAda
         rvTracks = findViewById(R.id.rvTracks);
         db = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "music-db")
-                .fallbackToDestructiveMigration() // <-- THÊM DÒNG NÀY
+                .fallbackToDestructiveMigration()
                 .build();
 
         setupRecyclerView();
         loadTracksFromDb();
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
 
         editTrackLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -59,7 +65,6 @@ public class UploadedMusicActivity extends AppCompatActivity implements TrackAda
 
     private void setupRecyclerView() {
         adapter = new TrackAdapter(trackList, position -> {
-            // *** XỬ LÝ KHI CLICK VÀO BÀI HÁT ***
             // 1. Mở PlayerActivity
             Intent intent = new Intent(UploadedMusicActivity.this, PlayerActivity.class);
 
@@ -72,14 +77,13 @@ public class UploadedMusicActivity extends AppCompatActivity implements TrackAda
         rvTracks.setAdapter(adapter);
     }
 
-    // --- THÊM MỚI 2 HÀM NÀY ---
     @Override
     public void onEditClick(Track track) {
         // Mở UploadActivity ở chế độ Sửa
         Intent intent = new Intent(this, UploadActivity.class);
         intent.putExtra(UploadActivity.EXTRA_TRACK_TO_EDIT, track);
 
-        // <-- SỬA LẠI: Dùng launcher để mở Activity -->
+        // Dùng launcher để mở Activity
         editTrackLauncher.launch(intent);
     }
 

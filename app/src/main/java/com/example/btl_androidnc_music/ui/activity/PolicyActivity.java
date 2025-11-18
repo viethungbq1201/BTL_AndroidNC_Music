@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.ui.activity; // Thay package của bạn
+package com.example.btl_androidnc_music.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_androidnc_music.R;
@@ -17,7 +16,7 @@ public class PolicyActivity extends AppCompatActivity {
     private ScrollView scrollViewPolicy;
     private Button btnAccept, btnDecline;
     private AuthManager authManager;
-    private String userEmail;
+    private String userUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +25,11 @@ public class PolicyActivity extends AppCompatActivity {
 
         authManager = new AuthManager(this);
 
-        userEmail = getIntent().getStringExtra("USER_EMAIL");
-        if (userEmail == null || userEmail.isEmpty()) {
-            // Nếu không có email (lỗi), không cho đồng ý
+        // Lấy UID từ Intent
+        userUid = getIntent().getStringExtra("USER_UID");
+        if (userUid == null || userUid.isEmpty()) {
             Toast.makeText(this, "Lỗi xác thực người dùng", Toast.LENGTH_SHORT).show();
-            finish(); // Đóng lại
+            finish();
             return;
         }
 
@@ -43,29 +42,25 @@ public class PolicyActivity extends AppCompatActivity {
 
         // Lắng nghe sự kiện cuộn
         scrollViewPolicy.getViewTreeObserver().addOnScrollChangedListener(() -> {
-            // Kiểm tra xem đã cuộn đến cuối chưa
             if (!scrollViewPolicy.canScrollVertically(1)) {
-                // Đã ở dưới cùng -> Hiện nút Chấp nhận
                 btnAccept.setVisibility(View.VISIBLE);
             }
         });
 
         // Xử lý nút Từ chối
         btnDecline.setOnClickListener(v -> {
-            // Thoát hoàn toàn ứng dụng
             finishAffinity();
         });
 
         // Xử lý nút Chấp nhận
         btnAccept.setOnClickListener(v -> {
-            // 1. SỬA: Lưu trạng thái cho đúng user
-            authManager.setPolicyAccepted(userEmail, true);
+            // 1. Lưu trạng thái cho đúng user UID
+            authManager.setPolicyAccepted(userUid, true);
 
             // 2. Chuyển đến màn hình chính
             Intent intent = new Intent(PolicyActivity.this, HomeActivity.class);
             startActivity(intent);
 
-            // 3. Đóng màn hình này lại
             finish();
         });
     }

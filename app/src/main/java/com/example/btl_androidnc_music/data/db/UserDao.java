@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.data.db; // Thay package của bạn
+package com.example.btl_androidnc_music.data.db;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -9,7 +9,6 @@ import com.example.btl_androidnc_music.data.model.User;
 
 @Dao
 public interface UserDao {
-    // onConflict = OnConflictStrategy.IGNORE: Nếu đã có user, bỏ qua
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertUser(User user);
 

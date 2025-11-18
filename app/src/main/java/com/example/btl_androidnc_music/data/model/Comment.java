@@ -1,6 +1,7 @@
-package com.example.btl_androidnc_music.data.model; // Thay package của bạn
+package com.example.btl_androidnc_music.data.model;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -12,8 +13,8 @@ import androidx.room.PrimaryKey;
                         childColumns = "trackId",
                         onDelete = ForeignKey.CASCADE),
                 @ForeignKey(entity = User.class,
-                        parentColumns = "username",  // Liên kết với cột 'username' của User
-                        childColumns = "username",   // Bằng cột 'username' của Comment
+                        parentColumns = "username",
+                        childColumns = "username",
                         onDelete = ForeignKey.CASCADE)
         })
 public class Comment {
@@ -29,4 +30,6 @@ public class Comment {
     public long timestamp; // Thời gian đăng
     public int likeCount = 0; // Số lượt tim
     public int parentCommentId = 0; // 0 = bình luận gốc, >0 = trả lời
+    @Nullable
+    public Integer parentId = null;
 }

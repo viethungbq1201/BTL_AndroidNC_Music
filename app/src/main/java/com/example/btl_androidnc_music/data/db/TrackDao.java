@@ -9,22 +9,21 @@ import androidx.room.Delete;
 
 import com.example.btl_androidnc_music.data.model.Track;
 
-@Dao // <-- Bắt buộc
+@Dao
 public interface TrackDao {
 
     @Insert
-    void insertTrack(Track track); // <-- Hàm này bạn đã gọi trong UploadActivity
+    void insertTrack(Track track);
 
     @Query("SELECT * FROM tracks")
-    List<Track> getAllTracks(); // <-- Thêm hàm này để sau này dùng
+    List<Track> getAllTracks();
 
-    // Bạn có thể thêm các hàm khác như Delete, Update ở đây
-    @Update // <-- THÊM MỚI
+    @Update
     void updateTrack(Track track);
-    @Delete // <-- THÊM MỚI
+    @Delete
     void deleteTrack(Track track);
 
-    @Query("SELECT * FROM tracks WHERE isFavorite = 1") // <-- THÊM MỚI
+    @Query("SELECT * FROM tracks WHERE isFavorite = 1")
     List<Track> getFavoriteTracks();
 
     @Query("SELECT * FROM tracks WHERE genre = :genre")
@@ -38,5 +37,4 @@ public interface TrackDao {
 
     @Query("SELECT * FROM tracks WHERE id = :trackId")
     Track getTrackById(int trackId);
-    // Thêm hàm này vào file TrackDao.java
 }

@@ -79,7 +79,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
             // Ẩn nút "..." đi
             holder.btnMore.setVisibility(View.GONE);
         }
-        // <-- THÊM MỚI: Hiển thị ảnh -->
+        // Hiển thị ảnh
         if (track.imagePath != null && !track.imagePath.isEmpty()) {
             holder.ivImage.setImageURI(Uri.fromFile(new File(track.imagePath)));
         } else {
@@ -93,7 +93,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
 
         holder.btnMore.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(holder.itemView.getContext(), holder.btnMore);
-            popup.inflate(R.menu.track_options_menu); // <-- Cần tạo file menu này
+            popup.inflate(R.menu.track_options_menu);
             popup.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
                 if (itemId == R.id.menu_edit) {
@@ -116,18 +116,17 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
 
     // ViewHolder
     class TrackViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivImage; // <-- Khai báo biến
-        TextView tvTitle, tvArtist, tvDuration; // <-- Khai báo biến
-        ImageButton btnMore; // <-- Khai báo biến
+        ImageView ivImage;
+        TextView tvTitle, tvArtist, tvDuration;
+        ImageButton btnMore;
 
         public TrackViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Ánh xạ (tìm) các View từ ID trong file XML
             ivImage = itemView.findViewById(R.id.ivTrackImage);
             tvTitle = itemView.findViewById(R.id.tvTrackTitle);
             tvArtist = itemView.findViewById(R.id.tvTrackArtist);
             tvDuration = itemView.findViewById(R.id.tvTrackDuration);
-            btnMore = itemView.findViewById(R.id.btnMoreOptions); // <-- Đây là nút đang bị lỗi
+            btnMore = itemView.findViewById(R.id.btnMoreOptions);
         }
     }
 }

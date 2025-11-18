@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room; // Cần import Room
 
+import com.example.btl_androidnc_music.R;
 import com.example.btl_androidnc_music.data.db.AppDatabase;
 import com.example.btl_androidnc_music.data.model.Track;
 import com.example.btl_androidnc_music.databinding.ActivityUploadBinding;
@@ -25,8 +27,8 @@ import android.media.MediaMetadataRetriever;
 public class UploadActivity extends AppCompatActivity {
 
     private ActivityUploadBinding binding;
-    private Uri selectedFileUri; // Lưu Uri của file nhạc đã chọn
-    private AppDatabase db; // Database Room của bạn
+    private Uri selectedFileUri;
+    private AppDatabase db;
     private Uri selectedImageUri;
     public static final String EXTRA_TRACK_TO_EDIT = "TRACK_TO_EDIT";
     private Track mTrackToEdit = null;
@@ -70,7 +72,7 @@ public class UploadActivity extends AppCompatActivity {
                 if (uri != null) {
                     selectedImageUri = uri;
                     binding.ivImagePreview.setImageURI(uri);
-                    binding.ivImagePreview.setVisibility(View.VISIBLE); // Hiển thị ảnh
+                    binding.ivImagePreview.setVisibility(View.VISIBLE);
                 }
             }
     );
@@ -81,19 +83,24 @@ public class UploadActivity extends AppCompatActivity {
         binding = ActivityUploadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Khởi tạo DB (Nên dùng Singleton)
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+
+        // Khởi tạo DB
         db = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "music-db")
-                .fallbackToDestructiveMigration() // <-- THÊM DÒNG NÀY
+                .fallbackToDestructiveMigration()
                 .build();
 
         if (getIntent().hasExtra(EXTRA_TRACK_TO_EDIT)) {
-            // Đây là chế độ Sửa
+            // Chế độ Sửa
             mTrackToEdit = (Track) getIntent().getSerializableExtra(EXTRA_TRACK_TO_EDIT);
             setTitle("Sửa thông tin bài hát"); // Đổi tiêu đề
             populateUiForEdit(mTrackToEdit);
         } else {
-            // Đây là chế độ Tải lên (như cũ)
+            // Chế độ Tải lên
             setTitle("Tải nhạc lên");
             binding.btnUpload.setText("Tải Lên");
         }
@@ -113,7 +120,6 @@ public class UploadActivity extends AppCompatActivity {
         });
     }
 
-    // Đổi tên hàm:
     private void saveTrack() {
         String title = binding.etTrackName.getText().toString().trim();
         String artist = binding.etArtistName.getText().toString().trim();
@@ -147,7 +153,6 @@ public class UploadActivity extends AppCompatActivity {
                     track.duration = selectedFileDuration;
                 }
             }
-            // (Nếu selectedFileUri == null và đang ở chế độ Sửa, ta giữ nguyên filePath và duration cũ)
 
             // 2. Xử lý file ảnh
             if (selectedImageUri != null) {
@@ -155,7 +160,6 @@ public class UploadActivity extends AppCompatActivity {
                 String newImagePath = copyFileToInternalStorage(selectedImageUri, "image_" + System.currentTimeMillis());
                 track.imagePath = newImagePath;
             }
-            // (Nếu selectedImageUri == null và đang ở chế độ Sửa, ta giữ nguyên imagePath cũ)
 
             // 3. Cập nhật thông tin text
             track.title = title;
@@ -179,7 +183,6 @@ public class UploadActivity extends AppCompatActivity {
             });
         });
     }
-    // Thêm hàm mới này vào UploadActivity.java
     private void populateUiForEdit(Track track) {
         binding.etTrackName.setText(track.title);
         binding.etArtistName.setText(track.artist);
@@ -227,7 +230,7 @@ public class UploadActivity extends AppCompatActivity {
                     outputStream.write(buf, 0, len);
                 }
             }
-            return file.getAbsolutePath(); // Trả về đường dẫn tuyệt đối của file mới
+            return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

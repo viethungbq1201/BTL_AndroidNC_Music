@@ -25,7 +25,7 @@ public class CategorySongAdapter extends RecyclerView.Adapter<CategorySongAdapte
         void onSongClick(ArrayList<Track> trackList, int position);
     }
 
-    // <-- SỬA LẠI: Thêm listener vào constructor -->
+    // Thêm listener vào constructor
     public CategorySongAdapter(List<Track> trackList, OnSongClickListener listener) {
         // Chuyển nó thành ArrayList để đảm bảo an toàn khi truyền qua Intent
         this.trackList = new ArrayList<>(trackList);
@@ -53,7 +53,7 @@ public class CategorySongAdapter extends RecyclerView.Adapter<CategorySongAdapte
             holder.ivCoverArt.setImageResource(R.drawable.ic_music_note);
         }
 
-        // Xử lý click (ví dụ: mở PlayerActivity)
+        // Xử lý click
         holder.itemView.setOnClickListener(v -> {
             listener.onSongClick((ArrayList<Track>) trackList, position);
         });
@@ -70,7 +70,6 @@ public class CategorySongAdapter extends RecyclerView.Adapter<CategorySongAdapte
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Ánh xạ (tìm) các View từ ID trong file XML
             ivCoverArt = itemView.findViewById(R.id.ivCoverArt);
             tvSongTitle = itemView.findViewById(R.id.tvSongTitle);
         }

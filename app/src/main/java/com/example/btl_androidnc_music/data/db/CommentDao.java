@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.data.db; // Thay package của bạn
+package com.example.btl_androidnc_music.data.db;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -26,6 +26,10 @@ public interface CommentDao {
 
     // Lấy bình luận trả lời (kèm thông tin user)
     @Transaction
-    @Query("SELECT * FROM comments WHERE parentCommentId = :parentCommentId ORDER BY timestamp ASC")
+    @Query("SELECT * FROM comments WHERE parentId = :parentCommentId ORDER BY timestamp DESC")
     List<CommentWithUser> getRepliesForComment(int parentCommentId);
+    @Transaction
+    @Query("SELECT * FROM comments WHERE trackId = :trackId AND parentId IS NULL ORDER BY timestamp DESC")
+    List<CommentWithUser> getCommentsForTrack(int trackId);
+
 }

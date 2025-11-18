@@ -13,7 +13,19 @@
         android:layout_weight="1"
         android:padding="8dp"/>
 
+    <TextView
+        android:id="@+id/tvReplyingTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đang trả lời..."
+        android:padding="8dp"
+        android:background="#E0E0E0"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone"
+        android:layout_above="@id/layout_send_comment"/>
+
     <LinearLayout
+        android:id="@+id/layout_send_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -22,7 +22,6 @@ public class MusicPlayerService extends MediaSessionService {
         // Khởi tạo MediaSession, liên kết nó với ExoPlayer
         mediaSession = new MediaSession.Builder(this, exoPlayer).build();
 
-        // (Bạn có thể thêm các Listener ở đây nếu cần, ví dụ:)
         exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onPlaybackStateChanged(int playbackState) {

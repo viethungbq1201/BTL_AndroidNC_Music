@@ -15,7 +15,7 @@ import androidx.room.Room;
 import com.example.btl_androidnc_music.data.db.AppDatabase;
 import com.example.btl_androidnc_music.data.model.CategoryRow;
 import com.example.btl_androidnc_music.data.model.Track;
-import com.example.btl_androidnc_music.databinding.FragmentHomeBinding; // Sẽ khác với binding cũ
+import com.example.btl_androidnc_music.databinding.FragmentHomeBinding;
 import com.example.btl_androidnc_music.service.MusicPlayerService;
 import com.example.btl_androidnc_music.ui.activity.PlayerActivity;
 import com.example.btl_androidnc_music.ui.adapter.CategorySongAdapter;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-// HomeFragment vẫn implement listener CỦA ADAPTER BÊN TRONG (CategorySongAdapter)
 public class HomeFragment extends Fragment implements CategorySongAdapter.OnSongClickListener {
 
     private FragmentHomeBinding binding;
@@ -56,7 +55,6 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
         binding.rvMainCategories.setAdapter(mainAdapter);
     }
 
-    // VIẾT LẠI HOÀN TOÀN HÀM NÀY
     private void loadAllCategories() {
         Executors.newSingleThreadExecutor().execute(() -> {
 
@@ -89,7 +87,6 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
         });
     }
 
-    // --- THAY THẾ TOÀN BỘ HÀM NÀY BẰNG LOGIC "SMART PLAYLIST" ---
     @Override
     public void onSongClick(ArrayList<Track> genreTrackList, int position) {
         // genreTrackList: là danh sách các bài CÙNG THỂ LOẠI (ví dụ: "Pop")
@@ -123,7 +120,7 @@ public class HomeFragment extends Fragment implements CategorySongAdapter.OnSong
             }
         }
 
-        // 6. KHỞI ĐỘNG SERVICE (Phần bạn bị thiếu)
+        // 6. KHỞI ĐỘNG SERVICE
         Intent serviceIntent = new Intent(getActivity(), MusicPlayerService.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("TRACK_LIST", finalPlaylist);

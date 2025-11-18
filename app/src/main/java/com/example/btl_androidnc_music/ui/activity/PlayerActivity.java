@@ -1,4 +1,4 @@
-package com.example.btl_androidnc_music.ui.activity; // <-- THAY PACKAGE CỦA BẠN
+package com.example.btl_androidnc_music.ui.activity;
 
 import android.content.ComponentName;
 import android.net.Uri;
@@ -32,14 +32,12 @@ public class PlayerActivity extends AppCompatActivity {
     private ActivityPlayerBinding binding;
     private ListenableFuture<MediaController> controllerFuture;
 
-    // SỬA: Chuyển từ "public static" thành "private"
     private MediaController mediaController;
 
     private ArrayList<Track> trackList;
     private int startPosition;
     private boolean hasNewPlaylist = false;
 
-    // <-- THÊM MỚI: Hàm Getter -->
     public MediaController getServiceMediaController() {
         return mediaController;
     }
@@ -59,8 +57,6 @@ public class PlayerActivity extends AppCompatActivity {
             hasNewPlaylist = false;
         }
 
-        // --- SỬA: XÓA PHẦN SETUP VIEWPAGER2 KHỎI ĐÂY ---
-        // (Chúng ta sẽ gọi nó sau khi kết nối service thành công)
     }
 
     @Override
@@ -73,16 +69,13 @@ public class PlayerActivity extends AppCompatActivity {
             try {
                 mediaController = controllerFuture.get();
 
-                // Luôn luôn setup ViewPager
                 setupViewPager();
 
-                // --- SỬA LOGIC Ở ĐÂY ---
                 // Chỉ chuẩn bị và phát playlist MỚI nếu được gửi từ HomeFragment
                 if (hasNewPlaylist) {
                     prepareAndPlayPlaylist();
                 }
                 // Nếu không, Activity sẽ tự động hiển thị bài đang phát
-                // --- KẾT THÚC SỬA ---
 
             } catch (ExecutionException | InterruptedException e) {
                 Toast.makeText(this, "Lỗi kết nối tới dịch vụ nhạc", Toast.LENGTH_SHORT).show();
@@ -91,7 +84,7 @@ public class PlayerActivity extends AppCompatActivity {
         }, MoreExecutors.directExecutor());
     }
 
-    // <-- THÊM MỚI: Hàm setup ViewPager2 -->
+    // Hàm setup ViewPager2
     private void setupViewPager() {
         PlayerViewPagerAdapter adapter = new PlayerViewPagerAdapter(this);
         binding.viewPagerPlayer.setAdapter(adapter);
@@ -107,7 +100,7 @@ public class PlayerActivity extends AppCompatActivity {
         List<MediaItem> mediaItems = new ArrayList<>();
         for (Track track : trackList) {
             mediaItems.add(new MediaItem.Builder()
-                    .setMediaId(String.valueOf(track.id)) // Quan trọng
+                    .setMediaId(String.valueOf(track.id))
                     .setUri(Uri.fromFile(new File(track.filePath)))
                     .build());
         }
@@ -124,11 +117,10 @@ public class PlayerActivity extends AppCompatActivity {
         // Giải phóng controller khi Activity dừng
         if (mediaController != null) {
             MediaController.releaseFuture(controllerFuture);
-            mediaController = null; // SỬA: Gán private member về null
+            mediaController = null;
         }
     }
 
-    // (Lớp ViewPagerAdapter bên trong giữ nguyên, không cần sửa)
     private class PlayerViewPagerAdapter extends FragmentStateAdapter {
         public PlayerViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);

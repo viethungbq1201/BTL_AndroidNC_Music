@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="24dp"
-    android:background="@drawable/bg_light_gradient">
+    android:background="@drawable/bg_light_gradient"
+    tools:context=".ui.activity.RegisterActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,13 +16,15 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#8E24AA"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="40dp"/>
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email/số điện thoại"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         android:background="@drawable/bg_album_art_light"
         android:padding="12dp" />
 
@@ -59,5 +63,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Bạn có tài khoản khác? Đăng nhập ngay"
-        android:textColor="#6A1B9A" />
+        android:textColor="#6A1B9A"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"/>
 </LinearLayout>
